@@ -92,4 +92,8 @@ public class StreamDemo {
 	
 //flatMap():处理多维stream，类似于多维数组的道理，for-loop 嵌套	
 
+
+另:
+一篇相关博客，还没读，maybe helpful
+https://www.cnblogs.com/carpenterlee/p/6637118.html
 }
