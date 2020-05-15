@@ -1,0 +1,95 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class StreamDemo {
+
+	public static void main(String[] args) throws IOException {
+//*Fall1: stream 作为一个集合类:
+		List<String> animal = Arrays.asList("Lion", "cat", "Dog", "wolf", "chicken");
+		for (String s : animal) {
+			if (s.startsWith("c")) {
+				s.toUpperCase();
+				/*...........*/
+			}
+		}		
+		
+		//用stream API改写:
+		List<String> sortedList =
+		animal.stream().filter(s -> s.startsWith("c"))
+		//filter在这里把符合条件的数据筛选出来；保留而非去掉。
+		//s相当于参数
+						.map(String::toUpperCase)
+						//map 对每一个数据（按括号中方法）进行处理/遍历
+						//双冒号是方法引用格式 - 类名::方法名
+						.sorted()
+						//对元素进行排序 *到这一步为止还是stream流
+						.collect(Collectors.toList());
+						//将 stream流 转换为 集合类List 收回来; 再将结果赋给17行sortedList
+		
+		System.out.println(sortedList);
+		
+//Fall2: stream 作为数组:
+		String[] animal2 = {"Lion", "cat", "Dog", "wolf", "chicken"};
+		//转化为stream
+		Stream.of(animal2).filter(s -> s.startsWith("w")).sorted();
+		
+//Fall3: with HashSet(Set也是集合类，集合类都可以转换为stream):
+		Set<String> set = new HashSet<>(animal);
+		set.stream().sorted();
+//Fall4: 把.txt文件转化成stream:
+		Paths.get("animal.text");
+		Files.lines(Paths.get("animal.txt")); //Error here.
+		
+
+		
+	}
+	
+/* lambda表达式 
+ * 单行:
+ * (e -> e.getNum() > 0);
+ * 多行: 用大括号把方法体括起
+ * (e -> {
+		if (e.getNum() > 0) 
+			System.out.println(e);
+		});
+ 
+ *
+	
+	
+ * Stream<T> filter(Predicate<? super T> predicate)
+ * 是Stream API 的方法之一，predicate 限定了主语/主体 的 特征/是什么/做什么/怎么样，相当于谓语；
+ * 即筛选主体的限定条件；从而筛选出我们需要哪些内容；
+ * Predicate类下的变量是可以自定义的，从而利于代码复用；
+ * public static Predicate<ClassName> funcNameAsFilterCondition1 = e -> e.getNum() > 55;
+ * public static Predicate<ClassName> funcNameAsFilterCondition2 = e -> e.getNum() % 2 == 0;
+ * 应用：
+ * classInstanceName.stream()
+ * 					.filter(ClassName.varNameAsFilterCondition1
+ * 							.and/or(ClassName.varNameAsFilterCondition2));
+ * 
+ * negate()方法: 取反/否定:筛选掉符合限定条件的数据（弃子）
+ *
+	
+ *
+	
+ * map(): 将数据从一种 格式/类型 转换成另一种
+ * Bsp:格式转换:
+ * Stream.of("Lion", "cat", "Dog", "wolf", "chicken")
+ * 		 .mapToInt(String::length)  //取字符串长度
+ * 		 .forEach(System.out::print);
+ * peek():一种特殊的map，当返回值与传入数据一样时使用
+ * 即： peek(e -> {})
+ * 	    map(e -> {return e;})
+ */
+
+	
+//flatMap():处理多维stream，类似于多维数组的道理，for-loop 嵌套	
+
+}
